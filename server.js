@@ -36,3 +36,10 @@ process.on('unhandledRejection', (err) => {
 });
 
 // test
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM RECIEVED. SHUTTING DOWN GRACEFULLY');
+  server.close(() => {
+    console.log('⚡⚡⚡ PROCESS TERMINATED');
+  });
+});
