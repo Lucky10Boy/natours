@@ -45,7 +45,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   });
 
   const url = `${req.protocol}://${req.get('host')}/me`;
-  console.log(url);
+
   await new Email(newUser, url).sendWelcome();
 
   createSendToken(newUser, 201, res);
@@ -64,8 +64,6 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
   }
-  console.log(user);
-
   // 3)if everythink ok send token to client
   createSendToken(user, 200, res);
 });
@@ -97,7 +95,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   // 2) Verficate token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log(decoded);
+
   // 3) Check if user still exists
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
@@ -149,7 +147,7 @@ exports.isLoggedIn = async (req, res, next) => {
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     // roles ['admin', 'lead-guide'.role='user'
-    console.log(roles);
+
     if (!roles.includes(req.user.role)) {
       return next(
         new AppError('You don`t have permission to perform this action.', 403)
@@ -221,9 +219,8 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   const user = await User.findById(req.user.id).select('+password');
-  console.log(user);
+
   // 2) Chech if posted current password is correct
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
     return next(
