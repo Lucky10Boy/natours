@@ -9,9 +9,6 @@
       }
     ],
     "spaced-comment": "off",
-    "parserOptions": {
-      "sourceType": "module"
-    },
     "no-console": "off",
     "consistent-return": "off",
     "func-names": "off",
