@@ -1,5 +1,6 @@
 /* eslint-disable no-dupe-keys */
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -24,6 +25,20 @@ app.enable('trust proxy');
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
+
+// Implement CORS
+app.use(cors());
+// Access-Control-Allow-Origin *
+// backend api.natours.com, frontend natours.com
+// app.use(
+//   cors({
+//     origin: 'https://www.natours.com',
+//   })
+// );
+
+app.options('*', cors());
+
+// app.options('/api/v1/tours/:id', cors());
 
 // SET security HTTP headers
 app.use(helmet());
